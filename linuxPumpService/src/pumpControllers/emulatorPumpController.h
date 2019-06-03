@@ -14,6 +14,7 @@ public:
 	// controller thread
 	void thread_setup(void);
 	void thread_loop(void);
+	IConfiguration* getConfiguration();
 
 	// pump and controller creation
 	Pump* pumpCreate(uint8_t pid, uint8_t wid, uint8_t *config, int config_size);
@@ -31,6 +32,8 @@ private:
 	};
 
 	void processRemoteEmulator(void);
+
+	PumpControllerConfiguration controllerConfig;
 
 	Pump* _pumpList[maxEmulatorPumps];
 	int emulatorPumpsQty;

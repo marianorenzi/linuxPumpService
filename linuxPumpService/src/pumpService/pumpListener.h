@@ -1,8 +1,6 @@
 #ifndef __PUMP_LISTENER_H__
 #define __PUMP_LISTENER_H__
 
-#include "Particle.h"
-
 class PumpListener {
 
   public:

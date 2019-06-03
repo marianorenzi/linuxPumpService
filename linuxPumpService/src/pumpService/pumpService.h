@@ -1,9 +1,13 @@
 #ifndef __PUMP_SERVICE_H__
 #define __PUMP_SERVICE_H__
 
+#include <cstdint>
+#include <string>
+#include <vector>
+
 #include "pump.h"
 #include "pumpController.h"
-#include <string>
+#include "pumpServiceConfiguration.h"
 
 class PumpService {
 
@@ -38,11 +42,10 @@ class PumpService {
     uint8_t pumpPriceDecimals(uint8_t id);
 
     void setup(std::string configFileName);
-    void thread_loop(void);
 	void thread(void);
 
-    PumpService() {}
-    ~PumpService() {}
+	PumpService() {}
+	~PumpService() {}
 
   private:
 
@@ -72,10 +75,10 @@ class PumpService {
     bool attachPumpController(PumpController *pumpController);
     bool attachPump(Pump *pump);
 
-    int _pumpQty;
-    int _pumpControllerQty;
-    PumpContainer* _pumpList[maxPumps];
-    PumpController* _pumpControllerList[maxPumpControllers];
+	PumpServiceConfiguration serviceConfiguration;
+
+	std::vector<PumpContainer*> _pumpList;
+	std::vector<PumpController*> _pumpControllerList;
 
 };
 

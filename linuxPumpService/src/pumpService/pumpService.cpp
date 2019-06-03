@@ -3,9 +3,7 @@
 // system
 
 // lib
-#include <lib/rapidjson/document.h>
 #include "../lib/objectFactrory.h"
-
 
 // controllers
 #include "../pumpControllers/emulatorPumpController.h"
@@ -14,49 +12,15 @@
 ///////////////////////////////////////////////////
 /////////////// PUMP SERVICE THREAD ///////////////
 ///////////////////////////////////////////////////
-void PumpService::thread_loop(void)
-{
-	// timer for pump controllers to execute
-	for (int c = 0; c < _pumpControllerQty; c++)
-	{
-		_pumpControllerList[c]->thread_loop();
-	}
-
-	// proces pump status and flags
-	// TODO
-}
-
 void PumpService::setup(std::string configFileName)
 {
-	char documentString[] = "{\"controllers\":[{\"type\":\"emulator\"},{\"type\":\"null\"},{\"type\":\"null\"}]}";
-	// config document
-	rapidjson::Document documentServiceConfig;
-	documentServiceConfig.Parse(documentString);
-	
-	// create controller factory
-	Factory<PumpController, std::string> controllerFactory;
-	controllerFactory.Register("emulator", new DerivedCreator<EmulatorPumpController, PumpController>);
-	controllerFactory.Register("null", new DerivedCreator<NullPumpController, PumpController>);
+	PumpController* pumpController;
 
-	// parse config file
-	documentServiceConfig.Parse(configFileName.c_str());
-
-	// get controllers config
-	const rapidjson::Value& controllersConfig = documentServiceConfig["controllers"];
-	assert(controllersConfig.IsArray());
-	for (rapidjson::SizeType i = 0; i < controllersConfig.Size(); i++)
+	int i = 0;
+	while ((pumpController = serviceConfiguration.getController(i++)))
 	{
-		auto controllerDocument = new rapidjson::Document();
-		controllerDocument->CopyFrom(controllersConfig[i], controllerDocument->GetAllocator());
-		PumpController* pumpController = controllerFactory.Create(std::string((*controllerDocument)["type"].GetString()));
 		this->attachPumpController(pumpController);
 	}
-
-	//PumpController *pumpController = new EmulatorPumpController();
-	//this->attachPumpController(pumpController);
-	//this->attachPump(pumpController->pumpCreate(1, 1, pump1Config, 2));
-	//this->attachPump(pumpController->pumpCreate(2, 2, pump2Config, 2));
-	//pumpController->thread_setup();
 }
 
 void PumpService::thread(void)
@@ -64,9 +28,10 @@ void PumpService::thread(void)
 	// load config
 	this->setup("");
 
-	while (1)
+	// proces pump status and flags
+	for (;;)
 	{
-		this->thread_loop();
+		// TODO
 	}
 }
 
@@ -111,9 +76,9 @@ bool PumpService::pumpStop(uint8_t pid)
 
 bool PumpService::pumpAllStop(void)
 {
-  for (int i = 0; i < _pumpQty; i++)
+  for (auto i = _pumpList.begin(); i != _pumpList.end(); i++)
   {
-    this->pumpStop(_pumpList[i]->pump->logicId);
+    this->pumpStop((*i)->pump->logicId);
   }
   
   return true;
@@ -294,9 +259,9 @@ uint8_t PumpService::pumpPriceDecimals(uint8_t id)
 ///////////////////////////////////////////////////
 PumpService::PumpContainer* PumpService::retrievePump(uint8_t pid)
 {
-  for (int i = 0; i < _pumpQty; i++)
+  for (auto it = _pumpList.begin(); it != _pumpList.end(); it++)
   {
-    if (_pumpList[i]->pump->logicId == pid) return _pumpList[i];
+    if ((*it)->pump->logicId == pid) return (*it);
   }
 
   return NULL;
@@ -311,12 +276,12 @@ bool PumpService::attachPumpController(PumpController *pumpController)
     return false;
   }
 
-  if (_pumpControllerQty >= maxPumpControllers)
+  if (_pumpControllerList.size() >= maxPumpControllers)
   {
     return false;
   }
 
-  _pumpControllerList[_pumpControllerQty++] = pumpController;
+  _pumpControllerList.push_back(pumpController);
 
   return true;
 }
@@ -330,12 +295,12 @@ bool PumpService::attachPump(Pump *pump)
     return false;
   }
 
-  if (_pumpQty >= maxPumps)
+  if (_pumpList.size() >= maxPumps)
   {
     return false;
   }
 
-  _pumpList[_pumpQty++] = new PumpContainer(pump);
+  _pumpList.push_back(new PumpContainer(pump));
 
   return true;
 }

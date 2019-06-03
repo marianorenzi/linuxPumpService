@@ -33,7 +33,13 @@ public:
 
 	T* Create(Key Id)
 	{
-		return FunctionMap[Id]->Create();
+		auto it = FunctionMap.find(Id);
+		if (it == FunctionMap.end())
+		{
+			return NULL;
+		}
+
+		return it->second->Create();
 	}
 
 	~Factory()

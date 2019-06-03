@@ -46,6 +46,8 @@ public:
 	void thread_setup(void) {}
 	void thread_loop(void) {}
 
+	IConfiguration* getConfiguration() { return &controllerConfig; }
+
 	// pump and controller creation
 	Pump* pumpCreate(uint8_t pid, uint8_t wid, uint8_t *config, int config_size) { return new NullPump; }
 	bool pumpAdd(Pump* pump) { return true; }
@@ -56,6 +58,8 @@ public:
 protected:
 
 private:
+
+	PumpControllerConfiguration controllerConfig;
 
 };
 

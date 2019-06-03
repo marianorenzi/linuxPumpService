@@ -5,28 +5,29 @@
 #include <stddef.h>
 #include <map>
 
-#include <lib/rapidjson/document.h>
-
 #include "pump.h"
+#include "pumpControllerConfiguration.h"
 
 class PumpController {
 
-  public:
+public:
 
-    virtual void thread_setup(void) = 0;
-    virtual void thread_loop(void) = 0;
+	virtual IConfiguration* getConfiguration() = 0;
+
+	virtual void thread_setup(void) = 0;
+	virtual void thread_loop(void) = 0;
 
 	virtual Pump* pumpCreate(uint8_t pid, uint8_t wid, uint8_t *config, int config_size) = 0;
-    virtual bool pumpAdd(Pump* pump) = 0;
+	virtual bool pumpAdd(Pump* pump) = 0;
 
-    PumpController() {}
-    // ~PumpController();
+	PumpController() {}
+	// ~PumpController();
 
-    // PumpController() {}
+	// PumpController() {}
 
-  protected:
+protected:
 
-  private:
+private:
 
 };
 

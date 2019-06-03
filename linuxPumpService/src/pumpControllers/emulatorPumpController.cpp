@@ -22,6 +22,11 @@ void EmulatorPumpController::thread_setup(void)
     }
 }
 
+IConfiguration* EmulatorPumpController::getConfiguration()
+{
+	return &controllerConfig;
+}
+
 void EmulatorPumpController::processRemoteEmulator(void)
 {
 #if 0

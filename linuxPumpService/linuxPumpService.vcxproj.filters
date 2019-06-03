@@ -4,6 +4,8 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\pumpService\pumpService.cpp" />
     <ClCompile Include="src\pumpControllers\emulatorPumpController.cpp" />
+    <ClCompile Include="src\pumpService\pumpServiceConfiguration.cpp" />
+    <ClCompile Include="src\pumpService\pumpControllerConfiguration.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\pumpService\pumpService.h" />
@@ -13,5 +15,7 @@
     <ClInclude Include="src\lib\objectFactrory.h" />
     <ClInclude Include="src\pumpControllers\emulatorPumpController.h" />
     <ClInclude Include="src\pumpControllers\nullPumpController.h" />
+    <ClInclude Include="src\pumpService\pumpServiceConfiguration.h" />
+    <ClInclude Include="src\pumpService\pumpControllerConfiguration.h" />
   </ItemGroup>
 </Project>
