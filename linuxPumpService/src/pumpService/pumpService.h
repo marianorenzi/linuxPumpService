@@ -41,11 +41,11 @@ class PumpService {
     uint8_t pumpMoneyDecimals(uint8_t id);
     uint8_t pumpPriceDecimals(uint8_t id);
 
-    void setup(std::string configFileName);
-	void thread(void);
-
 	PumpService() {}
+	PumpService(std::string configFilePath, std::string logFilePath = NULL);
 	~PumpService() {}
+
+	void join() { serviceThread.join(); }
 
   private:
 
@@ -75,10 +75,15 @@ class PumpService {
     bool attachPumpController(PumpController *pumpController);
     bool attachPump(Pump *pump);
 
+	void setup(std::string configFileName);
+	void thread(void);
+
 	PumpServiceConfiguration serviceConfiguration;
 
 	std::vector<PumpContainer*> _pumpList;
 	std::vector<PumpController*> _pumpControllerList;
+
+	std::thread serviceThread;
 
 };
 

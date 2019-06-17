@@ -12,8 +12,6 @@ class EmulatorPumpController : public PumpController {
 public:
 
 	// controller thread
-	void thread_setup(void);
-	void thread_loop(void);
 	IConfiguration* getConfiguration();
 
 	// pump and controller creation
@@ -30,6 +28,9 @@ private:
 	enum {
 		maxEmulatorPumps = 2,
 	};
+
+	void controllerInit();
+	void thread(void);
 
 	void processRemoteEmulator(void);
 

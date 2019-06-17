@@ -10,8 +10,6 @@
 PumpServiceConfiguration::PumpServiceConfiguration()
 {
 	// mock-up config
-	std::string documentString = "{\"controllers\":[{\"type\":\"emulator\"},{\"type\":\"null\"},{\"type\":\"null\"}]}";
-	this->setJsonConfigString(documentString);
 
 	// create controller factory
 	controllerFactory.Register("emulator", new DerivedCreator<EmulatorPumpController, PumpController>);
@@ -23,7 +21,7 @@ PumpServiceConfiguration::~PumpServiceConfiguration()
 	// TODO: free JSON Document
 }
 
-PumpController* PumpServiceConfiguration::getController(int index)
+PumpController* PumpServiceConfiguration::getController(uint index)
 {
 	// get controllers config
 	const rapidjson::Value& controllersConfig = jsonDocumentConfig["controllers"];

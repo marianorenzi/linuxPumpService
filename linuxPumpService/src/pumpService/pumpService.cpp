@@ -1,3 +1,5 @@
+#include <thread>
+
 #include "pumpService.h"
 
 // system
@@ -10,14 +12,26 @@
 #include "../pumpControllers/nullPumpController.h"
 
 ///////////////////////////////////////////////////
+//////////// PUMP SERVICE CONSTRUCTOR /////////////
+///////////////////////////////////////////////////
+PumpService::PumpService(std::string configFilePath, std::string logFilePath) :
+	serviceThread(&PumpService::thread, this)
+{
+	this->serviceConfiguration.setJsonConfigFilePath(configFilePath);
+}
+
+///////////////////////////////////////////////////
 /////////////// PUMP SERVICE THREAD ///////////////
 ///////////////////////////////////////////////////
 void PumpService::setup(std::string configFileName)
 {
 	PumpController* pumpController;
 
+	// wait for configuration
+	while (!this->serviceConfiguration.isSet());
+
 	int i = 0;
-	while ((pumpController = serviceConfiguration.getController(i++)))
+	while ((pumpController = this->serviceConfiguration.getController(i++)))
 	{
 		this->attachPumpController(pumpController);
 	}

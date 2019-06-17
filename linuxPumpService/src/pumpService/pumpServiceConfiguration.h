@@ -14,7 +14,7 @@ class PumpServiceConfiguration : public IConfiguration
 {
 public:
 
-	PumpController* getController(int index);
+	PumpController* getController(uint index);
 
 	PumpServiceConfiguration();
 	~PumpServiceConfiguration();

@@ -1,24 +1,33 @@
 #include "emulatorPumpController.h"
 #include <iostream>
 
-void EmulatorPumpController::thread_loop(void)
+void EmulatorPumpController::thread(void)
 {
-    // process tcp remote emulator
-    this->processRemoteEmulator();
+	this->controllerInit();
 
-    for(int i = 0; i < this->emulatorPumpsQty; i++)
-    {
-        this->_pumpList[i]->poll();
-    }
+	for (;;)
+	{
+		// process tcp remote emulator
+		this->processRemoteEmulator();
+
+		// pump controller business
+		for (Pump::Iterator i = this->pumpList.begin(); i != this->pumpList.end(); i++)
+		{
+			EmulatorPump* currentPump = static_cast<EmulatorPump*>(*i);
+			
+			// TODO: pump code
+			currentPump->poll();
+		}
+	}
 }
 
-void EmulatorPumpController::thread_setup(void)
+void EmulatorPumpController::controllerInit(void)
 {
     //this->server.begin();
 
-    for(int i = 0; i < this->emulatorPumpsQty; i++)
+    for(Pump::Iterator i = this->pumpList.begin(); i != this->pumpList.end(); i++)
     {
-        this->_pumpList[i]->setup();
+        (*i)->setup();
     }
 }
 

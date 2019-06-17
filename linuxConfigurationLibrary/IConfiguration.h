@@ -14,6 +14,8 @@ public:
 	bool setJsonConfigString(std::string jsonString);
 	bool setJsonConfigDocument(rapidjson::Document &document);
 
+	bool isSet() { return configIsSet; }
+
 	IConfiguration();
 
 protected:

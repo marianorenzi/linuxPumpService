@@ -4,10 +4,14 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <string>
+#include <vector>
 
 class Pump {
 
   public:
+
+	  typedef std::vector<Pump*> List;
+	  typedef std::vector<Pump*>::iterator Iterator;
 
     enum PumpStates
     {

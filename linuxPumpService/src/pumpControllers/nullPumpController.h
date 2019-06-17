@@ -42,10 +42,6 @@ class NullPumpController : public PumpController {
 
 public:
 
-	// controller thread
-	void thread_setup(void) {}
-	void thread_loop(void) {}
-
 	IConfiguration* getConfiguration() { return &controllerConfig; }
 
 	// pump and controller creation
@@ -58,6 +54,9 @@ public:
 protected:
 
 private:
+
+	// controller thread
+	void thread(void) { while (1); }
 
 	PumpControllerConfiguration controllerConfig;
 
